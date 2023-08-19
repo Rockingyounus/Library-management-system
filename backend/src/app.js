@@ -5,7 +5,7 @@ const cors = require('cors');
 const express = require("express")
 const morgan = require("morgan")
 const cookieParser = require("cookie-parser")
-const sessions = require("express-session")
+const session = require("express-session")
 const { apiV1 } = require("./routes")
 const { connectDb } = require("./db")
 const { UserModel } = require("./models/user")
@@ -19,13 +19,13 @@ app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }))
 
 app.use(
-  sessions({
+  session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
     resave: true,
   })
-)
+);
 
 app.use("/v1", apiV1)
 
@@ -50,7 +50,7 @@ connectDb()
     }
   })
   .then(() => {
-    app.listen(8080, () => console.log("Server is listening on http://localhost:8080"))
+    app.listen(process.env.PORT||4000, () => console.log(`Server is listening on http://localhost:${process.env.PORT||4000}`))
   })
   .catch((err) => {
     console.error("Failed to connect to database", err)
