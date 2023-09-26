@@ -1,73 +1,70 @@
-import { useState, useEffect } from "react" 
-import { BackendApi } from "../../client/backend-api/book";
+import { useState, useEffect } from "react";
+//import { BackendApi } from "../../client/backend-api"
+import axios from "axios";
 
 export const Booklist = () => {
-   
   const [books, setBooks] = useState([]);
 
-  const fetchBooks = async () => {
-    const { books } = await BackendApi.book.getAllbooks()
-    console.log(books)
-    setBooks(books)
-  }
-
   useEffect(() => {
-    fetchBooks().catch(console.error)
-  },[])
+    axios.get("http://localhost:8080/v1/book").then((response) => {
+      console.log(response);
+      setBooks(response.data.books);
+      // book=response.json()
+    });
+  }, []);
 
-    return (
-// {books.length > 0 ? (
-<>Book
-{/* <div className="w-[100%]">
-       
-  <body class="bg-gray-100">
-  <div class="container mx-auto p-8">
-    <h1 class="text-2xl font-semibold mb-4">Book List</h1>
-    <table class="min-w-full bg-white shadow-md rounded">
-      <thead>
-        <tr class="border-b">
-          <th class="text-left py-2 px-3">Book Name</th>
-          <th class="text-left py-2 px-3">Category</th>
-          <th class="text-left py-2 px-3">Quantity</th>
-          <th class="text-left py-2 px-3">Available</th>
-          <th class="text-left py-2 px-3">Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-b">
-          <td class="py-2 px-3">Book A</td>
-          <td class="py-2 px-3">Fiction</td>
-          <td class="py-2 px-3">10</td>
-          <td class="py-2 px-3">5</td>
-          <td class="py-2 px-3">$15.99</td>
-          <td class="py-2 px-3">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              View
-            </button>
-            </td>
-        </tr>
-        <tr class="border-b">
-          <td class="py-2 px-3">Book B</td>
-          <td class="py-2 px-3">Non-fiction</td>
-          <td class="py-2 px-3">15</td>
-          <td class="py-2 px-3">10</td>
-          <td class="py-2 px-3">$12.49</td>
-          <td class="py-2 px-3">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              View
-            </button> 
-            </td>
-        </tr>
-        
-      </tbody>
-    </table>
-  </div>
-</body>
-        
-</div> */}
-</>
+  return (
+    <>
+      <h1 className="text-2xl font-bold ">Book List</h1>
+      {books.length > 0 ? (
+        <>
+          <section className="bg-gray-100 p-4">
+            <div className="container mx-auto">
+              <table className="min-w-full border rounded-lg overflow-hidden">
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="px-4 py-2">Book Name</th>
+                    <th className="px-4 py-2">ISBN</th>
+                    <th className="px-4 py-2">Category</th>
+                    <th className="px-4 py-2">Quantity</th>
+                    <th className="px-4 py-2">Price</th>
+                  </tr>
+                </thead>
+                {/* <tbody id="table-body">
+            
+        </tbody> */}
 
-       
-        
-    )
-}
+                {books.map((books) => {
+                  return (
+                    <tbody className="mx-auto table-auto">
+                      <tr key={books.isbn}>
+                        <td className="border-b  p-6   px-24 py-2 ">
+                          {books.name}
+                        </td>
+                        <td className="border-b   p-6  px-24 py-2 ">
+                          {books.isbn}
+                        </td>
+                        <td className="border-b   p-6  px-24 py-2 ">
+                          {books.Category}
+                        </td>
+                        <td className="border-b p-6    px-24 py-2 ">
+                          {books.Quantity}
+                        </td>
+                        <td className="border-b  p-6   px-24 py-2 ">
+                          {books.Price}
+                        </td>
+                      </tr>
+                      {/* <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">View </button>  */}
+                    </tbody>
+                  );
+                })}
+              </table>
+            </div>
+          </section>
+        </>
+      ) : (
+        <h1>No Books found</h1>
+      )}
+    </>
+  );
+};
