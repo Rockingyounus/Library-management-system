@@ -22,9 +22,9 @@ const UserProvider = ({ children }) => {
         setIsAdmin(user && user.role === 'admin')
     }, [user])
 
-    useEffect(() => {
-        axios.get("http://localhost:8080/v1/user/profile")
-      //axios.get("http://localhost:8080/v1/BackendApi.user.getProfile()")
+     useEffect(() => {
+
+      BackendApi.user.getProfile()
         .then(({ user, error }) => {
             if (error) {
                 console.error(error)
@@ -33,6 +33,22 @@ const UserProvider = ({ children }) => {
             }
         }).catch(console.error)
     }, [])
+
+    // useEffect(() => {
+    //     const fetchUserProfile = async () => {
+    //       try {
+    //         const response = await axios.get('http://localhost:8080/v1/user/'); // Replace with your API endpoint
+    //         const { data } = response;
+            
+    //         setUser(data.user);
+    //       } catch (error) {
+    //         console.error(error);
+    //       }
+    //     };
+    
+    //     fetchUserProfile();
+    //   }, []);
+    
 
     const NotificationManager = () => {
         toast("errorddd");
@@ -46,11 +62,12 @@ const UserProvider = ({ children }) => {
     const loginUser = async (username, password) =>{
         
         const { user,error } = 
-         axios.post("http://localhost:8080/v1/user",{
+        await BackendApi.user.login(username,password)
+         //axios.get("http://localhost:8080/v1/user",{
         //axios.get("http://localhost:8080/BackendApi.user.login(username,password)")
-         username,
-         password,
-    });
+         //username,
+         //password,
+   //
         if (error) {
             NotificationManager()
         } else {
@@ -59,29 +76,7 @@ const UserProvider = ({ children }) => {
         }
      }
 
-//     const loginUser = async (username, password) => {
-//     try {
-//         const response = await axios.get("http://localhost:8080/v1/user/login", {
-//             username,
-//             password,
-//         });
-
-//         if (response.status === 400) {
-//             const { user, error } = response.data;
-//             if (error) {
-//                 NotificationManager();
-//             } else {
-//                 diffToast();
-//                 setUser(user);
-//             }
-//         } else {
-//             NotificationManager();
-//         }
-//     } catch (error) {
-//         console.error('An error occurred:', error);
-//         NotificationManager('An error occurred while logging in');
-//     }
-// };
+  
 
 
     const logoutUser = async () => {
@@ -100,28 +95,89 @@ const UserProvider = ({ children }) => {
 }
 
 export { useUser, UserProvider }
+ 
 
- // const loginUser = async (username, password) => {
-    //     try{
-    //         // Make an HTTP GET request to the login endpoint
-    //         const response = await axios.get("http://localhost:8080/v1/BackendApi.user.login?username=${username}&password=${password}");
-            
-    //         // Check the response status code or other conditions to determine if the login was successful
-    //         if (response.status === 200) {
-    //             // If successful, set the user data (assuming the user data is in the response)
-    //             const user = response.data; // You may need to adjust this based on your API response structure
-    //             setUser(user);
-    
-    //             // Show a success toast notification
-    //             diffToast();
-    //         } else {
-    //             // If not successful, handle the error (show an error message or perform other actions)
-    //              // Assuming your API returns an error message
-    //             NotificationManager();
-    //         }
-    //     } catch (error) {
-    //         // Handle any network or other errors that occurred during the request
-    //         console.error('An error occurred:', error);
-    //         NotificationManager('An error occurred while logging in');
-    //     }
-    // }
+// import { useState, useEffect, createContext, useContext } from "react";
+// import axios from "axios";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+// import { BackendApi } from "../../client/backend-api";
+
+// const UserContext = createContext({
+//   user: null,
+//   loginUser: () => {},
+// });
+
+// const useUser = () => useContext(UserContext);
+
+// const UserProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+//   const [isAdmin, setIsAdmin] = useState(false);
+
+//   useEffect(() => {
+//     setIsAdmin(user && user.role === "admin");
+//   }, [user]);
+
+//   const NotificationManager = (message) => {
+//     toast.error(message);
+//   };
+
+//   const diffToast = (message) => {
+//     toast.success(message);
+//   };
+
+//   const loginUser = async (username, password) => {
+//     try {
+//       const response = await axios.post(
+//         "http://localhost:8080/v1/user/login",
+//         { username, password },
+//         {
+//           headers: { "Content-Type": "application/json" },
+//         }
+//       );
+
+//       const { user, error } = response.data;
+
+//       if (error) {
+//         NotificationManager("Login failed. Please check your credentials.");
+//       } else {
+//         diffToast("Login Successful");
+//         setUser(user);
+//       }
+//     } catch (error) {
+//       console.error("Login error:", error);
+//       NotificationManager("An error occurred during login.");
+//     }
+//   };
+
+//   const logoutUser = async () => {
+//     setUser(null);
+//     await BackendApi.user.logout();
+//   };
+
+//   // Fetch user profile on component mount
+//   useEffect(() => {
+//     const fetchUserProfile = async () => {
+//       try {
+//         const response = await axios.get("http://localhost:8080/v1/user/profile");
+//         const { user } = response.data;
+//         setUser(user);
+//       } catch (error) {
+//         console.error("Fetch user profile error:", error);
+//       }
+//     };
+
+//     fetchUserProfile();
+//   }, []);
+
+//   return (
+//     <>
+//       <UserContext.Provider value={{ user, loginUser, logoutUser, isAdmin }}>
+//         {children}
+//       </UserContext.Provider>
+//       <ToastContainer />
+//     </>
+//   );
+// };
+
+// export { useUser, UserProvider };

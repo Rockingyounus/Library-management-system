@@ -13,26 +13,7 @@ function Layout() {
   const { user, loginUser, logoutUser, isAdmin } = useUser();
   const navigate = useNavigate();
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     isLoggedIn: false,
-  //   };
-  // }
-
-  // handleLogin = () => {
-  //   // Perform your login logic here
-  //   // For example, you can check credentials and set the state to true if login is successful
-  //   // For simplicity, we'll just toggle the state for demonstration purposes
-  //   this.setState({ isLoggedIn: true });
-  // };
-
-  // handleLogout = () => {
-  //   // Perform your logout logic here
-  //   // For simplicity, we'll just toggle the state for demonstration purposes
-  //   this.setState({ isLoggedIn: false });
-  // };
-
+  
 
   const handleLoginSubmit = (username, password) => {
     loginUser(username, password)
