@@ -23,7 +23,7 @@ const UserProvider = ({ children }) => {
     }, [user])
 
     useEffect(() => {
-        axios.get("http://localhost:8080/v1/user")
+        axios.get("http://localhost:8080/v1/user/profile")
       //axios.get("http://localhost:8080/v1/BackendApi.user.getProfile()")
         .then(({ user, error }) => {
             if (error) {
@@ -43,44 +43,45 @@ const UserProvider = ({ children }) => {
     } 
     
 
-    // const loginUser = async (username, password) =>{
+    const loginUser = async (username, password) =>{
         
-    //     const { user,error } = 
-    //      axios.post("http://localhost:8080/v1/user")
-    //     //axios.get("http://localhost:8080/BackendApi.user.login(username,password)")
-    //      username,
-    //      password,
-    //     if (error) {
-    //         NotificationManager()
-    //     } else {
-    //         diffToast()
-    //         setUser(user)
-    //     }
-    //  }
-
-    const loginUser = async (username, password) => {
-    try {
-        const response = await axios.get("http://localhost:8080/v1/user", {
-            username,
-            password,
-        });
-
-        if (response.status === 200) {
-            const { user, error } = response.data;
-            if (error) {
-                NotificationManager();
-            } else {
-                diffToast();
-                setUser(user);
-            }
+        const { user,error } = 
+         axios.post("http://localhost:8080/v1/user",{
+        //axios.get("http://localhost:8080/BackendApi.user.login(username,password)")
+         username,
+         password,
+    });
+        if (error) {
+            NotificationManager()
         } else {
-            NotificationManager();
+            diffToast()
+            setUser(user)
         }
-    } catch (error) {
-        console.error('An error occurred:', error);
-        NotificationManager('An error occurred while logging in');
-    }
-};
+     }
+
+//     const loginUser = async (username, password) => {
+//     try {
+//         const response = await axios.get("http://localhost:8080/v1/user/login", {
+//             username,
+//             password,
+//         });
+
+//         if (response.status === 400) {
+//             const { user, error } = response.data;
+//             if (error) {
+//                 NotificationManager();
+//             } else {
+//                 diffToast();
+//                 setUser(user);
+//             }
+//         } else {
+//             NotificationManager();
+//         }
+//     } catch (error) {
+//         console.error('An error occurred:', error);
+//         NotificationManager('An error occurred while logging in');
+//     }
+// };
 
 
     const logoutUser = async () => {
